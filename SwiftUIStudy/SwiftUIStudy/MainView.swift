@@ -41,21 +41,9 @@ struct MainView: View {
             .padding(.bottom, 7)
         }
     }
-    
-    /// Button Width
-    func buttonWidth(item: CalculatorButton) -> CGFloat {
-        // 0일 경우에만 넓은 width를 준다!
-        if item == .zero {
-            return ((UIScreen.main.bounds.width - (4 * 12)) / 4) * 2
-        }
-        return (UIScreen.main.bounds.width - (5 * 12)) / 4
-    }
-    
-    /// Button Height
-    func buttonHeight() -> CGFloat {
-        return (UIScreen.main.bounds.width - (5 * 12)) / 4
-    }
-    
+}
+
+extension MainView {
     /// 계산은 차차... 해볼게요
     func calculate(button: CalculatorButton) {
         print("")
