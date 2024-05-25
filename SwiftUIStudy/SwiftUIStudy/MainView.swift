@@ -9,6 +9,12 @@ import SwiftUI
 
 struct MainView: View {
     
+    @State private var displayNumber = "0"
+    @State private var computeNumber = 0
+    @State private var currentOperator: Operation = .none
+    @State private var shouldClearDisplay = false
+    @State private var history = []
+    
     // HStack이 5개니깐... 일단 이러케...
     private let buttons: [[CalculatorButton]] = [
         [.clear, .negative, .percent, .divide],
@@ -21,6 +27,14 @@ struct MainView: View {
     var body: some View {
         VStack {
             Spacer()
+            HStack {
+                Spacer()
+                Text("\(displayNumber)")
+                    .bold()
+                    .font(.system(size: 80))
+                    .foregroundColor(.white)
+            }
+            .padding()
             ForEach(buttons, id: \.self) { button in
                 HStack(spacing: 10) {
                     ForEach(button, id: \.self) { item in
