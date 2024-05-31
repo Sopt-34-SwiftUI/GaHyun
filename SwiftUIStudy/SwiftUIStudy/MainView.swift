@@ -10,12 +10,11 @@ import SwiftUI
 struct MainView: View {
     
     @State private var displayNumber = "0"
-    @State private var computeNumber = 0
+    @State private var runningNumber = 0
     @State private var currentOperator: Operation = .none
     @State private var shouldClearDisplay = false
-    @State private var history = []
+ 
     
-    // HStack이 5개니깐... 일단 이러케...
     private let buttons: [[CalculatorButton]] = [
         [.clear, .negative, .percent, .divide],
         [.seven, .eight, .nine, .multiply],
@@ -54,13 +53,69 @@ struct MainView: View {
             }
             .padding(.bottom, 7)
         }
+        .padding()
+        .background(Color.black)
+        .edgesIgnoringSafeArea(.all)
     }
+    
 }
 
 extension MainView {
-    /// 계산은 차차... 해볼게요
     func calculate(button: CalculatorButton) {
-        print("")
+        switch button {
+        case .add, .subtract, .multiply, .divide, .equal:
+            if button == .add {
+                currentOperator = .add
+                runningNumber = Int(displayNumber) ?? 0
+            }
+            else if button == .subtract {
+                currentOperator = .subtract
+                runningNumber = Int(displayNumber) ?? 0
+            }
+            else if button == .multiply {
+                currentOperator = .multiply
+                runningNumber = Int(displayNumber) ?? 0
+            }
+            else if button == .divide {
+                currentOperator = .divide
+                runningNumber = Int(displayNumber) ?? 0
+            }
+            else if button == .equal {
+                let runningValue = runningNumber
+                let currentValue = Int(displayNumber) ?? 0
+                
+                switch self.currentOperator {
+                case .add: displayNumber = "\(runningValue + currentValue)"
+                case .subtract: displayNumber = "\(runningValue - currentValue)"
+                case .multiply: displayNumber = "\(runningValue * currentValue)"
+                case .divide: displayNumber = "\(runningValue / currentValue)"
+                case .none:
+                    break
+                }
+            }
+            shouldClearDisplay = true
+            
+        case .clear:
+            displayNumber = "0"
+            runningNumber = 0
+            currentOperator = .none
+            shouldClearDisplay = false
+        case .decimal, .negative, .percent:
+            break
+        default: // 숫자일 경우
+            if shouldClearDisplay {
+                displayNumber = button.rawValue
+                shouldClearDisplay = false
+            } else {
+                let number = button.rawValue
+                if displayNumber == "0" {
+                    displayNumber = number
+                }
+                else {
+                    displayNumber = "\(displayNumber)\(number)"
+                }
+            }
+        }
     }
 }
 
